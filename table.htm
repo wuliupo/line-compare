@@ -109,7 +109,7 @@ tbody td:empty{background-color:#FFF;}
 </div>
 <script>
 window.onload = function(){
-	var lines = document.querySelectorAll('.line'), color = 1, i, line, from, to, height, parentOffset;
+	var lines = document.querySelectorAll('.line'), color, i, line, from, to, height, parentOffset, lastParentOffset;
 	for(i = 0; i<lines.length; i++){
 		line = lines[i];
 		from = line.getAttribute('data-from');
@@ -117,6 +117,12 @@ window.onload = function(){
 		from = document.getElementById(from);
 		to = document.getElementById(to);
 		parentOffset = from.parentNode.parentNode.offsetTop;
+		if (lastParentOffset !== parentOffset) {
+			lastParentOffset = parentOffset;
+			color = 1;
+		} else if (color < 6){
+			color++;
+		}
 		from = from.offsetTop - parentOffset + from.clientHeight/2;
 		to = to.offsetTop - parentOffset + to.clientHeight/2;
 		height = to - from;
@@ -124,7 +130,6 @@ window.onload = function(){
 		line.style.height = height + 'px';
 		height = Math.min(5, Math.ceil(height / 100));
 		line.style.backgroundImage = 'url(line/' + height + '-' + color + '.png)';
-		color = color < 6 ? color + 1 : 1;
 	}
 }
 </script>
