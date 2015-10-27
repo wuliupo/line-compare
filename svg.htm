@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>List compare</title>
+<style>
+.container{margin:0 auto;width:1000px;}
+table{border:1px solid:#BBB;width:100%;}
+td{border:1px solid #CCC;}
+td[id]{background-color:#FFEFDF;}
+td,th{height:40px;line-height:20px;padding:2px 10px;}
+td:nth-child(3n+1){background-color:#F7F7F7;width:400px;}
+td:nth-child(3n+2){min-width:100px;border:0;}
+td:nth-child(3n){background-color:#F7F7F7;min-width:400px;}
+thead th{background-color:#CCC;}
+tbody td[id]{background-color:#FFEFDF;}
+tbody td:empty{background-color:#FFF;}
+.line-container{position:relative;padding:0;}
+.line-container svg{position:absolute;width:126px;}
+.line-container line{stroke-width:2;}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>List compare</h1>
+<!-- table>(thead>tr>td*3^^^tbody>tr*2>td*3)*3 -->
+<table>
+	<thead>
+		<tr>
+			<th>Before Change</th>
+			<th></th>
+			<th>Before Change</th>
+		</tr>
+	</thead>
+	<tbody id="tbody1">
+		<tr>
+			<td>A</td>
+			<td class="line-container">
+				<svg data-from="B1" data-to="B2"></svg>
+			</td>
+			<td>A</td>
+		</tr>
+		<tr>
+			<td id="B1">B</td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td>C</td>
+			<td></td>
+			<td>C</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td></td>
+			<td id="B2">B</td>
+		</tr>
+	</tbody>
+	<thead>
+		<tr>
+			<th>Leaving</th>
+			<th></th>
+			<th>Leaving</th>
+		</tr>
+	</thead>
+	<tbody id="tbody1">
+		<tr>
+			<td>A</td>
+			<td class="line-container">
+				<svg data-from="B3" data-to="B4"></svg>
+				<svg data-from="C1" data-to="C2"></svg>
+			</td>
+			<td>A</td>
+		</tr>
+		<tr>
+			<td id="B3">B</td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td id="C1">C</td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td>D</td>
+			<td></td>
+			<td>D</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td></td>
+			<td id="C2">C</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td></td>
+			<td id="B4">B</td>
+		</tr>
+	</tbody>
+	<thead>
+		<tr>
+			<th>After Change</th>
+			<th></th>
+			<th>After Change</th>
+		</tr>
+	</thead>
+</table>
+</div>
+<script>
+window.onload = function(){
+	var colors = ['F00', '19F', 'FA1', '77E'], lines = document.getElementsByTagName('svg'), color, i, line, from, to, height, parentOffset, lastParentOffset;
+	for(i = 0; i<lines.length; i++){
+		line = lines[i];
+		from = line.getAttribute('data-from');
+		to = line.getAttribute('data-to');
+		from = document.getElementById(from);
+		to = document.getElementById(to);
+		parentOffset = from.parentNode.parentNode.offsetTop;
+		if (lastParentOffset !== parentOffset || color > 2 ) {
+			lastParentOffset = parentOffset;
+			color = 0;
+		} else if (color < 3){
+			color++;
+		}
+		from = from.offsetTop - parentOffset + from.clientHeight/2;
+		to = to.offsetTop - parentOffset + to.clientHeight/2;
+		height = to - from;
+		line.style.top = from + 'px';
+		line.style.height = height + 'px';
+		line.innerHTML = '<line x1="0" y1="0" x2="126" y2="' + height + '" style="stroke:#' + colors[color] + ';"/>';
+	}
+}
+</script>
+</body>
+</html>
