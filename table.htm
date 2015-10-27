@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>List compare</title>
+<style>
+.container{margin:0 auto;width:1000px;}
+table{border:1px solid:#BBB;width:100%;}
+td{border:1px solid #CCC;}
+td[id]{background-color:#FFEFDF;}
+td,th,.line{height:40px;line-height:20px;padding:2px 10px;}
+td:nth-child(3n+1){background-color:#F7F7F7;width:400px;}
+td:nth-child(3n+2){min-width:100px;border:0;}
+td:nth-child(3n){background-color:#F7F7F7;min-width:400px;}
+thead th{background-color:#CCC;}
+tbody td[id]{background-color:#FFEFDF;}
+tbody td:empty{background-color:#FFF;}
+.line{background-image:url(line/1-1.png);background-size:100% 100%;position:absolute;width:106px;}
+.line-container{position:relative;padding:0;}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>List compare</h1>
+<!-- table>(thead>tr>td*3^^^tbody>tr*2>td*3)*3 -->
+<table>
+	<thead>
+		<tr>
+			<th>Before Change</th>
+			<th></th>
+			<th>Before Change</th>
+		</tr>
+	</thead>
+	<tbody id="tbody1">
+		<tr>
+			<td>A</td>
+			<td class="line-container">
+				<div data-from="B1" data-to="B2" class="line"></div>
+			</td>
+			<td>A</td>
+		</tr>
+		<tr>
+			<td id="B1">B</td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td>C</td>
+			<td></td>
+			<td>C</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td></td>
+			<td id="B2">B</td>
+		</tr>
+	</tbody>
+	<thead>
+		<tr>
+			<th>Leaving</th>
+			<th></th>
+			<th>Leaving</th>
+		</tr>
+	</thead>
+	<tbody id="tbody1">
+		<tr>
+			<td>A</td>
+			<td class="line-container">
+				<div data-from="B3" data-to="B4" class="line"></div>
+				<div data-from="C1" data-to="C2" class="line"></div>
+			</td>
+			<td>A</td>
+		</tr>
+		<tr>
+			<td id="B3">B</td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td id="C1">C</td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td>D</td>
+			<td></td>
+			<td>D</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td></td>
+			<td id="C2">C</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td></td>
+			<td id="B4">B</td>
+		</tr>
+	</tbody>
+	<thead>
+		<tr>
+			<th>After Change</th>
+			<th></th>
+			<th>After Change</th>
+		</tr>
+	</thead>
+</table>
+
+</div>
+<script>
+window.onload = function(){
+	var lines = document.querySelectorAll('.line'), color = 1, i, line, from, to, height, parentOffset;
+	for(i = 0; i<lines.length; i++){
+		line = lines[i];
+		from = line.getAttribute('data-from');
+		to = line.getAttribute('data-to');
+		from = document.getElementById(from);
+		to = document.getElementById(to);
+		parentOffset = from.parentNode.parentNode.offsetTop;
+		from = from.offsetTop - parentOffset + from.clientHeight/2;
+		to = to.offsetTop - parentOffset + to.clientHeight/2;
+		height = to - from;
+		line.style.top = from + 'px';
+		line.style.height = height + 'px';
+		height = Math.min(5, Math.ceil(height / 100));
+		line.style.backgroundImage = 'url(line/' + height + '-' + color + '.png)';
+		color = color < 6 ? color + 1 : 1;
+	}
+}
+</script>
+</body>
+</html>
