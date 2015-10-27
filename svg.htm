@@ -17,7 +17,11 @@ tbody td[id]{background-color:#FFEFDF;}
 tbody td:empty{background-color:#FFF;}
 .line-container{position:relative;padding:0;}
 .line-container svg{position:absolute;width:126px;}
-.line-container line{stroke-width:2;}
+.line-container svg line{stroke-width:2;}
+.line-container svg:nth-child(4n+1) line{stroke:#F00;}
+.line-container svg:nth-child(4n+2) line{stroke:#19F;}
+.line-container svg:nth-child(4n+3) line{stroke:#FA1;}
+.line-container svg:nth-child(4n+4) line{stroke:#77E;}
 </style>
 </head>
 <body>
@@ -109,7 +113,7 @@ tbody td:empty{background-color:#FFF;}
 </div>
 <script>
 window.onload = function(){
-	var colors = ['F00', '19F', 'FA1', '77E'], lines = document.getElementsByTagName('svg'), color, i, line, from, to, height, parentOffset, lastParentOffset;
+	var lines = document.getElementsByTagName('svg'), i, line, from, to, height, parentOffset;
 	for(i = 0; i<lines.length; i++){
 		line = lines[i];
 		from = line.getAttribute('data-from');
@@ -117,18 +121,12 @@ window.onload = function(){
 		from = document.getElementById(from);
 		to = document.getElementById(to);
 		parentOffset = from.parentNode.parentNode.offsetTop;
-		if (lastParentOffset !== parentOffset || color > 2 ) {
-			lastParentOffset = parentOffset;
-			color = 0;
-		} else if (color < 3){
-			color++;
-		}
 		from = from.offsetTop - parentOffset + from.clientHeight/2;
 		to = to.offsetTop - parentOffset + to.clientHeight/2;
 		height = to - from;
 		line.style.top = from + 'px';
 		line.style.height = height + 'px';
-		line.innerHTML = '<line x1="0" y1="0" x2="126" y2="' + height + '" style="stroke:#' + colors[color] + ';"/>';
+		line.innerHTML = '<line x1="0" y1="0" x2="126" y2="' + height + '"/>';
 	}
 }
 </script>
